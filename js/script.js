@@ -25,19 +25,24 @@ function loadData() {
 
     // NY Times AJAX request
 
-    var nytReq = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=romney&facet_field=day_of_week&begin_date=20120101&end_date=20120101&api-key=5efb7c1a602e9a6cff740e1f039fc3ce:1:72234776';
+    var nytReq = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=' +
+      city +
+      '&end_date=20120101&api-key=5efb7c1a602e9a6cff740e1f039fc3ce:1:72234776';
 
-    $.getJSON( nytReq, function( data ) {
-      console.log(data);
+    $.getJSON( nytReq, function( data ){
+
+      $nytHeaderElem.text('New York Times Article About ' + city);
+      console.log("status = ", data.status);
       var items = [];
-      $.each( data, function( key, val ) {
-        items.push( "<li id='" + key + "'>" + val + "</li>" );
-      });
+      var docs = data.response.docs;
+      for (var i = 0; i < docs.length; i++) {
+        var article = docs[i];
+        $nytElem.append('<li class="article">' +
+          '<a href="' + article.web_url + '">' + article.headline.main +
+          '</a>' +
+          '</li>');
+      };
 
-      $( "<ul/>", {
-        "class": "my-new-list",
-        html: items.join( "" )
-      }).appendTo( "body" );
     });
 
 
