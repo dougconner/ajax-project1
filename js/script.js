@@ -30,10 +30,9 @@ function loadData() {
       '&end_date=20120101&api-key=5efb7c1a602e9a6cff740e1f039fc3ce:1:72234776';
 
     $.getJSON( nytReq, function( data ){
-
       $nytHeaderElem.text('New York Times Article About ' + city);
       console.log("status = ", data.status);
-      var items = [];
+
       var docs = data.response.docs;
       for (var i = 0; i < docs.length; i++) {
         var article = docs[i];
@@ -41,9 +40,12 @@ function loadData() {
           '<a href="' + article.web_url + '">' + article.headline.main +
           '</a>' +
           '</li>');
-      };
+      }
 
+    }).error(function() {
+      $nytHeaderElem.text('New York Times article could not be loaded');
     });
+
 
 
     return false;
